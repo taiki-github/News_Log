@@ -1,140 +1,171 @@
 <template>
-
   <div>
-    <div>{{$store.state.auth.email}}</div>
-      <v-btn @click="addData()">
-          追加
-      </v-btn>
-      <v-text-field v-model="memo"></v-text-field>
-      <v-row>
-        <v-col cols="6">
-          <v-card v-for="(task, index) in tasks" :key="index" class="timelineCard">
-              <div >
-          <div > <v-icon>mdi-account</v-icon>{{task.user}}<br></div>
-          <hr>
-          <div class="timelineMemo">{{ task.memo}} </div>
-          <v-btn @click="deleteData(task.dbNumber)">削除</v-btn>
-          
-        
-              </div>
+    <v-card class="postTextCard">
+      <v-textarea
+        v-model="memo"
+        rows="4"
+        counter="300"
+        placeholder="ここに投稿を入力"
+        class="postTextArea"
+      ></v-textarea>
+      <v-btn @click="addData()" class="postButton"> 投稿 </v-btn>
+    </v-card>
+    <v-row>
+      <v-col cols="6">
+          <v-card
+            v-for="(task, index) in tasks"
+            :key="index"
+            class="timelineCard"
+          >
+              <div><v-icon>mdi-account</v-icon>{{ task.userName }}<br /></div>
+              <hr />
+              <div class="timelineMemo">{{ task.memo }}</div>
+              <v-row>
+                <v-col cols="9">
+                </v-col>
+                <v-col cols="1">
+                  <v-btn @click="deleteData(task.dbNumber)" color="error" class="deleteBtn">削除</v-btn>
+                </v-col>
+              </v-row>
           </v-card>
-        </v-col>
-        <v-col cols="6">
-          <News/>
-        </v-col>
-      </v-row>
+      </v-col>
+      <v-col cols="6">
+        <News />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script>
-import { getFirestore, collection, getDocs,doc,setDoc,deleteDoc,getDoc} from 'firebase/firestore'
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  doc,
+  setDoc,
+  deleteDoc,
+  getDoc,
+} from "firebase/firestore";
 export default {
-  data(){         
+  data() {
     return {
       tasks: [],
-      memo:"",
-      user:this.$store.state.auth.email,
-      dbNumber: 0
+      memo: "",
+      user: this.$store.state.auth.email,
+      dbNumber: 10000,
+      userName:""
+    };
+  },
+
+  async created() {
+    try {
+      const db = getFirestore(this.$firebase);
+      const user = this.user;
+      const querySnapshot = await getDocs(collection(db, user));
+      const Name = await getDoc(doc(db, "Name:"+this.user, "userName"));
+      const userName=Name.data().userName;
+      querySnapshot.forEach((doc) => {
+        this.tasks.push(doc.data());
+      });
+      this.userName = userName
+      this.tasks.reverse();
+      const Number = await getDoc(doc(db, "Number", "dbNumber"));
+      this.dbNumber = Number.data().dbNumber;
+      this.dbNumber = this.dbNumber + 1;
+    } catch (e) {
+      console.error("error:", e);
     }
   },
 
-  async created(){
-    try { 
-      const db = getFirestore(this.$firebase)
-      const user = this.user
-      const querySnapshot = await getDocs(collection(db, user))
-      querySnapshot.forEach( doc => {
-        this.tasks.push(doc.data())
-      })
-      this.tasks.reverse()
-      const Number=await getDoc(doc(db,'Number','dbNumber'))
-      this.dbNumber= Number.data().dbNumber
-       this.dbNumber = this.dbNumber + 1
-    } catch(e){
-      console.error('error:', e)
-    }
-  },
+  methods: {
+    async addData() {
+      try {
+        if (this.memo) {
+          const db = getFirestore(this.$Firestore);
+          const user = this.user;
+          const dbNumber = this.dbNumber;
+          const text = "";
+          //    ここで変数を宣言しないとpushやsetDocのときにつかえない
 
+          //  ここでfirestore(データベース)全体を取得
+          await setDoc(doc(db, user, user + dbNumber), {
+            // tasksは任意の名前をつけているだけ
+            memo: this.memo,
+            user: this.user,
+            dbNumber: this.dbNumber,
+            userName: this.userName
+          });
 
-  methods:{
-  async addData(){
-       try{
-           if(this.memo){
+          await setDoc(doc(db, "tasks", text + dbNumber), {
+            // tasksは任意の名前をつけているだけ
+            memo: this.memo,
+            user: this.user,
+            dbNumber: this.dbNumber,
+            userName: this.userName
+          });
 
-           const db = getFirestore(this.$Firestore)
-           const user = this.user 
-           const dbNumber = this.dbNumber
-           const text = ""
-        //    ここで変数を宣言しないとpushやsetDocのときにつかえない
-            
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
-           //  ここでfirestore(データベース)全体を取得  
-         await setDoc(doc(db,user,user+dbNumber),
-         {// tasksは任意の名前をつけているだけ
-              memo:this.memo,
-             user:this.user,
-              dbNumber:this.dbNumber,
-           })
+          setDoc(doc(db, "Number", "dbNumber"), {
+            dbNumber: this.dbNumber,
+          });
 
-         await setDoc(doc(db,'tasks',text+dbNumber),
-         {// tasksは任意の名前をつけているだけ
-              memo:this.memo,
-              user:this.user,
-               dbNumber:this.dbNumber
-           })
-
-
-        setDoc(doc(db,'Number','dbNumber'),{
-          dbNumber: this.dbNumber
+          this.tasks.push({
+            user: this.user,
+            memo: this.memo,
+            dbNumber: this.dbNumber,
+          });
+          this.memo = "";
+          this.dbNumber = this.dbNumber + 1;
         }
-         )
-           
-           
-            this.tasks.push({
-              user:this.user,
-              memo:this.memo,
-              dbNumber:this.dbNumber
-              })
-            this.memo=""
-            this.dbNumber = this.dbNumber + 1
-
-           }
-       }catch(e){
-          console.error("error",e)
-       }
-   },
-   
-async deleteData(dbNumber){
-  try{
-   const db = getFirestore(this.$Firestore)
-   const user = this.user 
-   const text = ""
-   await deleteDoc(doc(db,user,user+dbNumber))
-   await deleteDoc(doc(db,'tasks',text+dbNumber))
-   this.saveData()
-  }catch(e){
-    console.error("error",e)
-  }
-},
-async saveData(){
-     const db = getFirestore(this.$firebase)
-     const user = this.user
-     const dataLength = this.tasks.length
-      const querySnapshot = await getDocs(collection(db, user))
-      this.tasks.splice(0,dataLength)
-      querySnapshot.forEach( doc => {
-        this.tasks.push(doc.data())
-      })
-},
- logout(){
-        this.$store.dispatch('auth/logout')
-          
+      } catch (e) {
+        console.error("error", e);
       }
-  
-   }
-}
+    },
+
+    async deleteData(dbNumber) {
+      try {
+        const db = getFirestore(this.$Firestore);
+        const user = this.user;
+        const text = "";
+        await deleteDoc(doc(db, user, user + dbNumber));
+        await deleteDoc(doc(db, "tasks", text + dbNumber));
+        this.saveData();
+      } catch (e) {
+        console.error("error", e);
+      }
+    },
+    async saveData() {
+      const db = getFirestore(this.$firebase);
+      const user = this.user;
+      const dataLength = this.tasks.length;
+      const querySnapshot = await getDocs(collection(db, user));
+      this.tasks.splice(0, dataLength);
+      querySnapshot.forEach((doc) => {
+        this.tasks.push(doc.data());
+      });
+    },
+    logout() {
+      this.$store.dispatch("auth/logout");
+    },
+  },
+};
 </script>
 
 <style>
-
+.postTextCard {
+  margin-bottom: 30px;
+  margin-top: 40px;
+}
+.postTextArea {
+  width: 60%;
+  margin-left: 40px;
+  padding-top: 20px;
+}
+.postButton {
+  margin-bottom: 20px;
+  margin-left: 50px;
+}
+.deleteBtn{
+  margin-top: 20px;
+  
+}
 </style>

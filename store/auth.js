@@ -3,11 +3,21 @@ import {
     signInWithEmailAndPassword,
     signOut
 } from 'firebase/auth'
+import {
+    getFirestore,
+    collection,
+    getDocs,
+    doc,
+    setDoc,
+    deleteDoc,
+    getDoc,
+  } from "firebase/firestore";
+  
 
 export const state = () => ({
     isLoggedIn: false,
     email: '',
-    userName:''
+    userName:'未登録'
 })
 
 export const mutations = {
@@ -17,6 +27,13 @@ export const mutations = {
     setEmail(state,email){
        state.email = email
     },
+    setUserName(state,userName){
+        if(userName){
+       state.userName = userName
+        }else{
+       state.userName = "未登録"
+        }
+    }
     
 }
 
@@ -25,9 +42,15 @@ export const actions = {
         try {
             // vuexの引数には注意する
             const auth = getAuth(this.$firebase)
+            const db = getFirestore(this.$firebase);
+            const Name = await getDoc(doc(db, "Name:"+payload.email, "userName"));
+            const userName=Name.data().userName;
+            // この二つを経由しないとエラーになる
+                
             await signInWithEmailAndPassword(auth, payload.email, payload.password)
-            commit('setLoginState', true , )
+            commit('setLoginState', true )
             commit('setEmail',payload.email)
+            commit('setUserName',userName)
             this.$router.push('/timeLine')
         } catch (e) {
             alert(e.message)
@@ -39,5 +62,9 @@ export const actions = {
                 commit('setLoginState', false)
                 this.$router.push('/auth/login')
     },
+    addUserInfo({commit},payload){
+        commit('setLoginState', true )
+        commit('setEmail',payload.email)
+    }
 }
 

@@ -1,44 +1,84 @@
 <template>
-  <v-card class="accountCard center">
-      <h1 class="cardTitle">アカウント</h1>
-      <p class="cardElement">ユーザーネーム</p>
-      <p class="cardElement">{{$store.state.auth.email}}</p>
-      <v-btn @click="logout()" class="logoutBtn">ログアウト</v-btn>
-  </v-card>
+  <div>
+    <v-text-field
+      v-model="newName"
+      placeholder="ここに名前を入力"
+    ></v-text-field>
+    <v-btn @click="setUserName()">登録</v-btn>
+    <v-card class="accountCard center">
+      <h1 class="cardTitle">Account</h1>
+      <p class="cardElement">{{ $store.state.auth.userName }}</p>
+      <p class="cardElement">{{ $store.state.auth.email }}</p>
+      <v-btn @click="logout()" class="logoutBtn" color="error">ログアウト</v-btn>
+    </v-card>
+  </div>
 </template>
 
 <script>
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  doc,
+  setDoc,
+  deleteDoc,
+  getDoc,
+} from "firebase/firestore";
+
 export default {
+  data() {
+    return {
+      user: this.$store.state.auth.email,
+      newName:""
+    };
+  },
+  async created() {
+    try {
+    } catch (e) {
+      console.error("error:", e);
+    }
+  },
 
-   methods:{
-    logout(){
-           this.$store.dispatch('auth/logout')
-         }
-   }
-
-}
+  methods: {
+    setUserName(){
+      if(this.newName){
+          const db = getFirestore(this.$Firestore);
+           setDoc(doc(db, "Name:"+this.user, "userName"), {
+            userName: this.newName,
+          });
+      this.$store.commit("auth/setUserName", 
+        this.newName,
+        );
+        this.newName = ""
+      }  
+    },
+    logout() {
+      this.$store.dispatch("auth/logout");
+    },
+  },
+};
 </script>
 
 <style>
- @media screen and (min-width: 481px){
-  .accountCard{
-      width: 400px;
-      height: 400px;
-     
+@media screen and (min-width: 481px) {
+  .accountCard {
+    width: 400px;
+    height: 400px;
   }
-  .cardTitle{
-      margin: 50px;
+  .cardTitle {
+    margin: 50px;
+    font-family: serif;
   }
-  .cardElement{
+  .cardElement {
     margin: 20px;
     font-size: 20px;
   }
-  .logoutBtn{
+  .logoutBtn {
     margin-top: 40px;
   }
-  .center{
-    margin: 100px  auto ;
+  .center {
+    margin: 100px auto;
     text-align: center;
   }
- }
+}
 </style>

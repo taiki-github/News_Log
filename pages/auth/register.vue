@@ -24,6 +24,15 @@
 
 <script>
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
+import {
+    getFirestore,
+    collection,
+    getDocs,
+    doc,
+    setDoc,
+    deleteDoc,
+    getDoc,
+  } from "firebase/firestore";
 export default {
 
   data(){
@@ -39,6 +48,10 @@ export default {
    const auth = getAuth(this.$firebase)
     await  createUserWithEmailAndPassword(auth, this.email, this.password)
     // このような処理は非同期通信をつかわないと上手くいかないことがある
+    const db = getFirestore(this.$Firestore);
+           setDoc(doc(db, "Name:"+this.email, "userName"), {
+            userName: "未登録",
+          });
      this.$router.push(`/auth/login`)
 } catch (error) {
   alert(error);

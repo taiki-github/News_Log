@@ -5,12 +5,12 @@ import { initializeApp } from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyD_Y62KJ-o4iwbx_nehrYhzhA9bbuEspDM",
-  authDomain: "sns-app-995f1.firebaseapp.com",
-  projectId: "sns-app-995f1",
-  storageBucket: "sns-app-995f1.appspot.com",
-  messagingSenderId: "206794030661",
-  appId: "1:206794030661:web:25b3796c52a9849e31ad2c"
+  apiKey: "AIzaSyDip_pte2apsYjoV3grXMc-Ka4jTjGvI78",
+  authDomain: "news-memo-703e6.firebaseapp.com",
+  projectId: "news-memo-703e6",
+  storageBucket: "news-memo-703e6.appspot.com",
+  messagingSenderId: "892657777787",
+  appId: "1:892657777787:web:a295d645fc87bc7b2376de"
 };
 
 

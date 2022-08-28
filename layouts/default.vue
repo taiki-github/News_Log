@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app >
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant="miniVariant"
@@ -28,6 +28,7 @@
       :clipped-left="clipped"
       fixed
       app
+      class="header-backgroundcolor"
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
 
@@ -61,7 +62,7 @@
         <v-icon>mdi-menu</v-icon>
       </v-btn> -->
     </v-app-bar>
-    <v-main >
+    <v-main class="backgroundcolor">
       <v-container>
         <Nuxt />
       </v-container>
@@ -106,29 +107,46 @@ export default {
       fixed: false,
       items: [
         {
-          icon: 'mdi-apps',
-          title: '投稿',
+          icon: 'mdi-home',
+          title: 'ホーム',
           to: '/timeLine',
         },
          {
-          icon: 'mdi-apps',
-          title: 'マイリスト',
+          icon: 'mdi-airplane',
+          title:'ニュース',
+          to: '/newsPage'
+        },
+        //  {
+        //   icon: 'mdi-weather-partly-cloudy',
+        //   title:'天気',
+        //   to: '/weather'
+        // },
+         {
+          icon: 'mdi-pencil',
+          title: '投稿',
           to: '/timeLine/myList',
         },
+         {
+          icon: 'mdi-magnify',
+          title:'ニュース検索',
+          to: '/search'
+        },
         {
+          icon: 'mdi-folder ',
+          title:'メモリスト',
+          to: '/memoList'
+        },
+         {
           icon: 'mdi-account',
           title: 'アカウント',
           to: '/myPage/account',
         },
-        {
-          title:'ニュース',
-          to: '/newsPage'
-        }
+
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'SNS'
+      title: 'News Log'
     }
   }
 }
@@ -136,6 +154,10 @@ export default {
 
 <style>
 .backgroundcolor{
-    background: linear-gradient(to bottom right, lightgreen, white);
+    background: linear-gradient(to bottom right, rgb(198, 228, 246), white);
   }
+.header-backgroundcolor{
+  background: linear-gradient(to bottom right, gray,rgba(0, 0, 0, 0.695));
+  /* background-color: blue; */
+}
 </style>
