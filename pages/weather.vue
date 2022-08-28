@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div>天気</div>
     <div class="city-wrap">
     <h2 id="city-name" class="city-name"></h2>
     <div id="weather-discription" class="weather-discription"></div>
