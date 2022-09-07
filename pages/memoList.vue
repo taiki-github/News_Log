@@ -1,30 +1,52 @@
 <template>
-  <div>
-      memoList
+   <div>
+        <v-card color="secondary" ><v-card-title>掲示板</v-card-title>
+         </v-card>
+        <div class="postArea">
+          <v-card
+            v-for="(memo, index) in memos"
+            :key="index"
+            class="timelineCard"
+          >
+            <div>
+              <div><v-icon>mdi-account</v-icon>{{ memo.title }}<br /></div>
+              <hr />
+              <div class="timelineMemo">{{ memo.user }}</div>
+            </div>
+          </v-card>
+        </div>
   </div>
 </template>
 
 <script>
+  import {
+  getFirestore,
+  collection,
+  getDocs,
+  doc,
+  setDoc,
+  deleteDoc,
+  getDoc,
+} from "firebase/firestore";
 export default {
   data(){
     return {
       user: this.$store.state.auth.email,
+      memos: [],
+      memo: "",
     }
   },
   created(){
-    // const db = getFirestore(this.$firebase);
-    //   const user = this.user;
-    //   const querySnapshot = await getDocs(collection(db, user));
-    //   const Name = await getDoc(doc(db, "Name:"+this.user, "userName"));
-    //   const userName=Name.data().userName;
-    //   querySnapshot.forEach((doc) => {
-    //     this.tasks.push(doc.data());
-    //   });
-    //   this.userName = userName
-    //   this.tasks.reverse();
-    //   const Number = await getDoc(doc(db, "Number", "dbNumber"));
-    //   this.dbNumber = Number.data().dbNumber;
-    //   this.dbNumber = this.dbNumber + 1;
+    try {
+      const db = getFirestore(this.$firebase);
+      const querySnapshot = getDocs(collection(db, "memoNews"));
+      querySnapshot.forEach((doc) => {
+        this.memos.push(doc.data());
+      });
+     
+    } catch (e) {
+      console.error("error:", e);
+    }
   },
   methods: {
     
