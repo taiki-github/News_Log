@@ -45,6 +45,7 @@ import {
   setDoc,
   deleteDoc,
   getDoc,
+  where
 } from "firebase/firestore";
 export default {
   data() {
@@ -72,6 +73,7 @@ export default {
       const Number = await getDoc(doc(db, "Number", "dbNumber"));
       this.dbNumber = Number.data().dbNumber;
       this.dbNumber = this.dbNumber + 1;
+      
     } catch (e) {
       console.error("error:", e);
     }

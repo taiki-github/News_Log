@@ -61,22 +61,7 @@ export default {
     };
   },
   async created() {
-    // this.searchResults = [];
-    // // クエリーストリングを作成
-    // const baseUrl =
-    //   "https://api.open-meteo.com/v1/forecast?latitude=35.6785&longitude=139.6823&hourly=temperature_2m&timezone=Asia%2FTokyo";
-    // const response = await fetch(baseUrl).then((response) => response.json());
-    // // fetchはhtppリクエスト的なことが出きる
-    // for (const news of response.articles) {
-    //   const title = news.title;
-    //   const url = news.url;
-    //   const image = news.urlToImage;
-    //   this.searchResults.push({
-    //     title,
-    //     url,
-    //     image,
-    //   });
-    // }
+   
   },
   methods: {
     

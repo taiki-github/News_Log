@@ -1,15 +1,17 @@
 <template>
-  <div>
-    <v-text-field
-      v-model="newName"
-      placeholder="ここに名前を入力"
-    ></v-text-field>
-    <v-btn @click="setUserName()">登録</v-btn>
-    <v-card class="accountCard center">
-      <h1 class="cardTitle">Account</h1>
-      <p class="cardElement">{{ $store.state.auth.userName }}</p>
+  <div class="center">
+    <div v-show="setUserNameTextField">
+      <v-text-field
+        v-model="newName"
+        placeholder="ここに名前を入力"
+      ></v-text-field>
+      <v-btn class="setUserNameBotton" @click="setUserName()" color="primary">登録</v-btn>
+    </div>
+    <v-card class="accountCard ">
+      <h1 class="cardTitle center">Account</h1>
+      <div class="cardElement">{{ $store.state.auth.userName }}<v-btn class="setUserNameBotton" @click="textFieldShow()" color="primary">変更</v-btn></div>
       <p class="cardElement">{{ $store.state.auth.email }}</p>
-      <v-btn @click="logout()" class="logoutBtn" color="error">ログアウト</v-btn>
+      <v-btn @click="logout()" class="logoutBtn center" color="error">ログアウト</v-btn>
     </v-card>
   </div>
 </template>
@@ -29,6 +31,7 @@ export default {
   data() {
     return {
       user: this.$store.state.auth.email,
+      setUserNameTextField:false,
       newName:""
     };
   },
@@ -50,7 +53,11 @@ export default {
         this.newName,
         );
         this.newName = ""
+        this.setUserNameTextField=false;
       }  
+    },
+    textFieldShow(){
+        this.setUserNameTextField=true;
     },
     logout() {
       this.$store.dispatch("auth/logout");
@@ -64,6 +71,7 @@ export default {
   .accountCard {
     width: 400px;
     height: 400px;
+    margin: auto;
   }
   .cardTitle {
     margin: 50px;
@@ -77,8 +85,11 @@ export default {
     margin-top: 40px;
   }
   .center {
-    margin: 100px auto;
     text-align: center;
   }
+  .setUserNameBotton{
+    margin-left: 20px;
+  }
+  
 }
 </style>

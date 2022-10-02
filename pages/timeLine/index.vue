@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{this.$store.state.auth.isLoggedIn}}
     <v-row>
        <v-col cols="8">
         <News />

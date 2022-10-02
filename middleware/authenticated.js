@@ -7,15 +7,19 @@
    route,
    redirect
  }){
-  const auth = getAuth($firebase)
-
-    onAuthStateChanged(auth, (user) => {
-      if(!auth&&!route.path.match(/\/auth\//)){
+  // &&!route.path.match(/\/auth\//)
+   const auth = getAuth($firebase)
+  // const auth =this.$store.state.auth.email
+    // onAuthStateChanged(auth, (user) => {
+      if(!auth){
+        console.log("ログインしてません");
         redirect('/auth/login')   
-      }else{ 
-       store.dispatch('auth/addUserInfo', user)
       }
-  })
+      console.log("gagag");
+      // else{ 
+      //  store.dispatch('auth/addUserInfo', user)
+      // }
+  // })
   
 }
 

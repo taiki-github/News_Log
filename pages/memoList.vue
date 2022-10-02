@@ -1,60 +1,81 @@
 <template>
-   <div>
-        <v-card color="secondary" ><v-card-title>掲示板</v-card-title>
-         </v-card>
-        <div class="postArea">
-          <v-card
-            v-for="(memo, index) in memos"
-            :key="index"
-            class="timelineCard"
-          >
-            <div>
-              <div><v-icon>mdi-account</v-icon>{{ memo.title }}<br /></div>
-              <hr />
-              <div class="timelineMemo">{{ memo.user }}</div>
-            </div>
-          </v-card>
-        </div>
+  <div>
+    <v-card color="secondary"><v-card-title>メモリスト</v-card-title> </v-card>
+
+    <v-card v-for="(memo, index) in memos" :key="index" class="timelineCard">
+      <v-row>
+        <v-col cols="3">
+          <v-img :src="memo.image"></v-img>
+        </v-col>
+        <v-col cols="9">
+          <a :href="memo.url" target="_blank">{{ memo.title }}</a>
+          <div>
+            <v-btn color="warning" @click="viewNewsMemo(index)"> メモ</v-btn>
+          </div>
+        </v-col>
+      </v-row>
+    </v-card>
   </div>
 </template>
 
 <script>
-  import {
+import {
   getFirestore,
   collection,
   getDocs,
+  where,
+  query,
   doc,
   setDoc,
   deleteDoc,
   getDoc,
 } from "firebase/firestore";
 export default {
-  data(){
+  data() {
     return {
       user: this.$store.state.auth.email,
       memos: [],
       memo: "",
-    }
+    };
   },
-  created(){
+  async created() {
     try {
       const db = getFirestore(this.$firebase);
-      const querySnapshot = getDocs(collection(db, "memoNews"));
+      const memoNews = await query(
+        collection(db, "memoNews"),
+        where("user", "==", this.user)
+      );
+      const querySnapshot = await getDocs(memoNews);
+
       querySnapshot.forEach((doc) => {
         this.memos.push(doc.data());
       });
-     
     } catch (e) {
       console.error("error:", e);
     }
   },
   methods: {
-    
-  }
-}
+    async viewNewsMemo(index) {
+      // const user = this.user;
+      // const db = getFirestore(this.$firebase);
+      // const Id = await getDoc(doc(db, "memoNumber", user));
+      // this.memoId = Id.data().number;
+
+      this.$router.push({
+        path: `edit/` + this.memos[index].memoId,
+        query: {
+          title: this.memos[index].title,
+          url: this.memos[index].url,
+          image: this.memos[index].image,
+          memoId:this.memos[index].memoId,
+          memo:this.memos[index].memo
+        },
+      });
+    },
+  },
+};
 </script>
 
 <style>
-
 </style>
 

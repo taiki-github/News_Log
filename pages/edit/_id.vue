@@ -21,7 +21,8 @@
             counter="300"
             placeholder="ここにメモを入力"
             class="postTextArea"
-          ></v-textarea>
+            value="aaa"
+          >aaa</v-textarea>
         </v-col>
         <v-col cols="4">
           <v-btn @click="saveNewsMemo()"> 保存 </v-btn>
@@ -49,8 +50,8 @@ export default {
       menu: false,
       news: [],
       user: this.$store.state.auth.email,
-      memo: "",
-      memoId: 0,
+      memo: this.$route.query.memo,
+      
     };
   },
   async created() {
@@ -72,20 +73,19 @@ export default {
         const db = getFirestore(this.$Firestore);
         const user = this.user;
         const Id = await getDoc(doc(db, "memoNumber", user));
-        this.memoId = Id.data().number;
-        await setDoc(doc(db, "memoNews", user + this.memoId), {
+        // this.memoId = this.$router.query.memoId;
+        await setDoc(doc(db, "memoNews", user + this.$route.query.memoId), {
           memo: this.memo,
           user: this.user,
-          memoId: this.memoId,
+          memoId:this.$route.query.memoId,
           title: this.$route.query.title,
           url: this.$route.query.url,
           image: this.$route.query.image,
         });
+        console.log(this.$route.query.Id);
         this.$router.push("/memoList");
-        this.memoId = this.memoId + 1;
-        await setDoc(doc(db, "memoNumber", user), {
-          number: this.memoId,
-        });
+        
+        // this.memoId = this.memoId + 1;
       }
     },
   },

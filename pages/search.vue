@@ -31,9 +31,7 @@
 </template>
 
 <script>
-import News from "../components/News.vue";
 export default {
-  components: { News },
   data() {
     return {
       keyword: "",

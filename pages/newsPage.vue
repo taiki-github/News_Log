@@ -84,8 +84,8 @@
 </template>
 
 <script>
-import News from "../components/News.vue";
-import SelectBotton from "../components/SelectBotton.vue";
+// import News from "../components/News.vue";
+// import SelectBotton from "../components/SelectBotton.vue";
 import {
   getFirestore,
   collection,
@@ -97,7 +97,7 @@ import {
 } from "firebase/firestore";
 
 export default {
-  components: { News, SelectBotton },
+  // components: { News, SelectBotton },
   data() {
     return {
       keyword: "",
@@ -139,9 +139,14 @@ export default {
           title: this.searchResults[index].title,
           url: this.searchResults[index].url,
           image: this.searchResults[index].image,
-          memoId:this.memoId
+          memoId:this.memoId,
+          memo:this.memo
         },
+        
       });
+      await setDoc(doc(db, "memoNumber", user), {
+          number: this.memoId+1,
+        });
     },
     async selectNewsCategory(keyword, id) {
       try {
