@@ -25,7 +25,7 @@
           >aaa</v-textarea>
         </v-col>
         <v-col cols="4">
-          <v-btn @click="saveNewsMemo()"> 保存 </v-btn>
+          <v-btn @click="saveNewsMemo()" color="primary"> 保存 </v-btn>
         </v-col>
       </v-row>
     </v-card>

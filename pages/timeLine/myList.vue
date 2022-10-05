@@ -1,38 +1,68 @@
 <template>
   <div>
-    <v-card class="postTextCard">
-      <v-textarea
-        v-model="memo"
-        rows="4"
-        counter="300"
-        placeholder="ここに投稿を入力"
-        class="postTextArea"
-      ></v-textarea>
-      <v-btn @click="addData()" class="postButton"> 投稿 </v-btn>
-    </v-card>
-    <v-row>
-      <v-col cols="6">
-          <v-card
-            v-for="(task, index) in tasks"
-            :key="index"
-            class="timelineCard"
-          >
-              <div><v-icon>mdi-account</v-icon>{{ task.userName }}<br /></div>
-              <hr />
-              <div class="timelineMemo">{{ task.memo }}</div>
-              <v-row>
-                <v-col cols="9">
-                </v-col>
-                <v-col cols="1">
-                  <v-btn @click="deleteData(task.dbNumber)" color="error" class="deleteBtn">削除</v-btn>
-                </v-col>
-              </v-row>
-          </v-card>
-      </v-col>
-      <v-col cols="6">
-        <News />
-      </v-col>
-    </v-row>
+    <div class="postPage">
+      <v-card class="postTextCard">
+        <v-textarea
+          v-model="memo"
+          rows="4"
+          counter="300"
+          placeholder="ここに投稿を入力"
+          class="postTextArea"
+        ></v-textarea>
+        <v-btn @click="addData()" class="postButton" color="primary"> 投稿 </v-btn>
+      </v-card>
+      <v-row>
+        <v-col cols="6">
+          <v-card color="secondary" class="titleCard"><v-card-title>過去の投稿一覧</v-card-title>
+      </v-card>
+            <v-card
+              v-for="(task, index) in tasks"
+              :key="index"
+              class="timelineCard"
+            >
+                <div><v-icon>mdi-account</v-icon>{{ task.userName }}<br /></div>
+                <hr />
+                <div class="timelineMemo">{{ task.memo }}</div>
+                <v-row>
+                  <v-col cols="9">
+                  </v-col>
+                  <v-col cols="1">
+                    <v-btn @click="deleteData(task.dbNumber)" color="error" class="deleteBtn">削除</v-btn>
+                  </v-col>
+                </v-row>
+            </v-card>
+        </v-col>
+        <v-col cols="6">
+          <News />
+        </v-col>
+      </v-row>
+    </div>
+    <div class="postPageMobile">
+      <v-card class="postTextCard">
+        <v-textarea
+          v-model="memo"
+          rows="4"
+          counter="300"
+          placeholder="ここに投稿を入力"
+          class="postTextArea"
+        ></v-textarea>
+        <v-btn @click="addData()" class="postButton" color="primary"> 投稿 </v-btn>
+      </v-card>
+      
+      <v-card color="secondary" class="titleCard"><v-card-title>過去の投稿一覧</v-card-title>
+      </v-card>
+            <v-card
+              v-for="(task, index) in tasks"
+              :key="index"
+              class="timelineCard"
+            >
+                <div><v-icon>mdi-account</v-icon>{{ task.userName }}<br /></div>
+                <hr />
+                <div class="timelineMemo">{{ task.memo }}</div>
+                    <v-btn @click="deleteData(task.dbNumber)" color="error" class="deleteBtn">削除</v-btn>    
+            </v-card>
+    </div>
+    
   </div>
 </template>
 
@@ -153,6 +183,7 @@ export default {
 </script>
 
 <style>
+  @media screen and (min-width: 481px) {
 .postTextCard {
   margin-bottom: 30px;
   margin-top: 40px;
@@ -168,6 +199,32 @@ export default {
 }
 .deleteBtn{
   margin-top: 20px;
-  
 }
+.postPageMobile{
+  display: none;
+}
+  }
+  @media screen and (max-width: 481px) {
+.postPage{
+  display: none;
+}
+.deleteBtn{
+  margin-top: 20px;
+  margin-bottom: 10px;
+  margin-left: 300px;
+}
+.postTextArea {
+  width: 80%;
+  margin-left: 40px;
+  padding-top: 20px;
+}
+.postTextCard {
+  margin-bottom: 30px;
+}
+.postButton {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  margin-left: 30px;
+}
+  }
 </style>

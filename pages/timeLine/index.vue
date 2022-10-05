@@ -1,28 +1,48 @@
 <template>
   <div>
-    {{this.$store.state.auth.isLoggedIn}}
-    <v-row>
-       <v-col cols="8">
-        <News />
-      </v-col>
-      <v-col cols="4" class="home-timeline">
-        <v-card color="secondary" ><v-card-title>掲示板</v-card-title>
-         </v-card>
-        <div class="postArea">
-          <v-card
-            v-for="(task, index) in tasks"
-            :key="index"
-            class="timelineCard"
-          >
-            <div>
-              <div><v-icon>mdi-account</v-icon>{{ task.userName }}<br /></div>
-              <hr />
-              <div class="timelineMemo">{{ task.memo }}</div>
-            </div>
-          </v-card>
-        </div>
-      </v-col>
-    </v-row>
+    <div class="topPage">
+      <v-row>
+         <v-col cols="8">
+          <News />
+        </v-col>
+        <v-col cols="4" class="home-timeline">
+          <v-card color="secondary" ><v-card-title>掲示板</v-card-title>
+           </v-card>
+          <div class="postArea">
+            <v-card
+              v-for="(task, index) in tasks"
+              :key="index"
+              class="timelineCard"
+            >
+              <div>
+                <div><v-icon>mdi-account</v-icon>{{ task.userName }}<br /></div>
+                <hr />
+                <div class="timelineMemo">{{ task.memo }}</div>
+              </div>
+            </v-card>
+          </div>
+        </v-col>
+      </v-row>
+    </div>
+    <div class="topPageMobile">  
+          <v-card color="secondary" class="titleCard"><v-card-title>掲示板</v-card-title>
+           </v-card>
+          <div class="postArea">
+            <v-card
+              v-for="(task, index) in tasks"
+              :key="index"
+              class="timelineCard"
+            >
+              <div>
+                <div><v-icon>mdi-account</v-icon>{{ task.userName }}<br /></div>
+                <hr />
+                <div class="timelineMemo">{{ task.memo }}</div>
+              </div>
+            </v-card>
+          </div>
+          <v-card color="secondary" class="titleCard"><v-card-title>トップニュース</v-card-title></v-card>
+          <News />
+    </div>
   </div>
 </template>
 
@@ -75,12 +95,27 @@ export default {
 </script>
 
 <style>
+  @media screen and (min-width: 481px) {
    .home-timeline{
     margin-top: 50px;
-    /* background-color: #FBB; */
    }
    .postArea{
     height: 600px;
     overflow: scroll;
    }
+   .topPageMobile{
+    display: none;
+   }
+  }
+  @media screen and (max-width: 481px) {
+   .topPage{
+    display: none;
+   }
+   .postArea{
+    height: 350px;
+    margin-bottom: 30px;
+    overflow: scroll;
+   }
+  }
+  
 </style>

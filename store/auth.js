@@ -16,6 +16,7 @@ import {
 
 export const state = () => ({
     isLoggedIn: false,
+    userUid: '',
     email: '',
     userName:'未登録'
 })
@@ -27,6 +28,9 @@ export const mutations = {
     setEmail(state,email){
        state.email = email
     },
+    setUserUid( state, userUid ){
+        state.userUid = userUid
+      },
     setUserName(state,userName){
         if(userName){
        state.userName = userName
@@ -48,10 +52,15 @@ export const actions = {
             // この二つを経由しないとエラーになる
                 
             await signInWithEmailAndPassword(auth, payload.email, payload.password)
-            commit('setLoginState', true )
+            .then(userCredential=>{
+                commit('setLoginState', true )
             commit('setEmail',payload.email)
+            commit('setUserUid', userCredential.user.uid)
             commit('setUserName',userName)
             this.$router.push('/timeLine')
+
+            })
+            
         } catch (e) {
             alert(e.message)
         }
@@ -60,11 +69,21 @@ export const actions = {
         const auth = getAuth(this.$firebase)
         await signOut(auth)
                 commit('setLoginState', false)
+                commit('setUserUid', '')
                 this.$router.push('/auth/login')
     },
     addUserInfo({commit},payload){
         commit('setLoginState', true )
+        commit('setUserUid', payload.uid)
         commit('setEmail',payload.email)
     }
 }
+export const getters = {
+    // getLoggedIn(state){
+    //   return !!state.isLoggedIn
+    // }
+    getLoggedIn: state => !!state.isLoggedIn,
+    getUserUid: state => state.userUid,
+    getEmail: state => state.email
+  }
 

@@ -92,4 +92,29 @@ export default {
   }
   
 }
+@media screen and (max-width: 481px) {
+  .accountCard {
+    width: 350px;
+    height: 320px;
+    margin: auto;
+  }
+  .cardTitle {
+    margin: 50px;
+    font-family: serif;
+  }
+  .cardElement {
+    margin: 20px;
+    font-size: 20px;
+  }
+  .logoutBtn {
+    margin-top: 20px;
+  }
+  .center {
+    text-align: center;
+  }
+  .setUserNameBotton{
+    margin-left: 20px;
+  }
+  
+}
 </style>

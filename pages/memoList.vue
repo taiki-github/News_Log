@@ -1,6 +1,5 @@
 <template>
   <div>
-    <v-card color="secondary"><v-card-title>メモリスト</v-card-title> </v-card>
 
     <v-card v-for="(memo, index) in memos" :key="index" class="timelineCard">
       <v-row>
@@ -10,7 +9,7 @@
         <v-col cols="9">
           <a :href="memo.url" target="_blank">{{ memo.title }}</a>
           <div>
-            <v-btn color="warning" @click="viewNewsMemo(index)"> メモ</v-btn>
+            <v-btn color="success" @click="viewNewsMemo(index)"> メモ</v-btn>
           </div>
         </v-col>
       </v-row>

@@ -127,7 +127,7 @@ export default {
   .loginCard {
     width: 300px;
     margin-top: 50px;
-    margin-left: 50px;
+    margin-left: 40px;
   }
   .loginTextField {
     padding: 10px;

@@ -1,54 +1,67 @@
 <template>
   <div>
-    <div style="display: flex">
-      <v-btn
-        plain
-        class="selectedNewsCategory selectBotton"
-        @click="selectNewsCategory('general', 0)"
-      >
-        トップ
-      </v-btn>
-      <v-btn
-        plain
-        @click="selectNewsCategory('business', 1)"
-        class="selectBotton"
-      >
-        経済
-      </v-btn>
-      <v-btn
-        plain
-        @click="selectNewsCategory('science', 2)"
-        class="selectBotton"
-      >
-        科学
-      </v-btn>
-      <v-btn
-        plain
-        @click="selectNewsCategory('health', 3)"
-        class="selectBotton"
-      >
-        健康
-      </v-btn>
-      <v-btn
-        plain
-        @click="selectNewsCategory('entertainment', 4)"
-        class="selectBotton"
-        >エンタメ</v-btn
-      >
-      <v-btn
-        plain
-        @click="selectNewsCategory('technology', 5)"
-        class="selectBotton"
-      >
-        テクノロジー
-      </v-btn>
-      <v-btn
-        plain
-        @click="selectNewsCategory('sports', 6)"
-        class="selectBotton"
-      >
-        スポーツ
-      </v-btn>
+    <div class="newsSelectBottons">
+      <div style="display: flex">
+        <v-btn
+          plain
+          class="selectedNewsCategory selectBotton"
+          @click="selectNewsCategory('general', 0)"
+        >
+          トップ
+        </v-btn>
+        <v-btn
+          plain
+          @click="selectNewsCategory('business', 1)"
+          class="selectBotton"
+        >
+          経済
+        </v-btn>
+        <v-btn
+          plain
+          @click="selectNewsCategory('science', 2)"
+          class="selectBotton"
+        >
+          科学
+        </v-btn>
+        <v-btn
+          plain
+          @click="selectNewsCategory('health', 3)"
+          class="selectBotton"
+        >
+          健康
+        </v-btn>
+        <v-btn
+          plain
+          @click="selectNewsCategory('entertainment', 4)"
+          class="selectBotton"
+          >エンタメ
+          </v-btn>
+        <v-btn
+          plain
+          @click="selectNewsCategory('technology', 5)"
+          class="selectBotton"
+        >
+          テクノロジー
+        </v-btn>
+        <v-btn
+          plain
+          @click="selectNewsCategory('sports', 6)"
+          class="selectBotton"
+        >
+          スポーツ
+        </v-btn>
+      </div>
+    </div>
+    <div class="newsSelectBottonsMobile">
+      <div style="display: flex">
+        <v-combobox
+      outlined
+      :items="items"
+      solo
+      v-model="select"
+      @change="selectBoxChange()"
+     ></v-combobox>
+      </div>
     </div>
     <v-row>
       <v-col
@@ -74,7 +87,7 @@
               >
                 メモ
               </v-btn>
-              <v-btn class="news-plus-botton" color="warning"> 共有 </v-btn>
+              <!-- <v-btn class="news-plus-botton" color="warning"> 共有 </v-btn> -->
             </v-col>
           </v-row>
         </v-card>
@@ -106,6 +119,17 @@ export default {
       memoId: 10000,
       userName: "",
       memoNews: [],
+      items: [
+          'トップ',
+          '経済',
+          '科学',
+          '健康',
+          'エンタメ',
+          'テクノロジー',
+          'スポーツ'
+        ],
+        select:"トップ",
+        category:"general"
     };
   },
   async created() {
@@ -148,6 +172,8 @@ export default {
           number: this.memoId+1,
         });
     },
+
+
     async selectNewsCategory(keyword, id) {
       try {
         const selectBotton = document.getElementsByClassName("selectBotton");
@@ -178,12 +204,80 @@ export default {
         this.isFound = false;
       }
     },
+
+
+    selectBoxChange(){
+      console.log(this.select);
+       switch (this.select){
+        case "トップ":
+          this.category = "general" 
+          break;
+
+        case "経済":
+          this.category = "business"
+          break;
+
+        case "科学":
+           this.category = "science"
+           break;
+
+        case "健康":
+          this.category = "health"
+          break;
+
+        case "エンタメ":
+        this.category = "entertainment"
+        break;
+
+        case "テクノロジー":
+        this.category = "technology"  
+        break;
+
+        case "スポーツ":
+        this.category = "sports" 
+        break;  
+
+       }
+       console.log(this.category);
+       this.changeNewsCategory()
+    },
+   async changeNewsCategory(){
+    console.log(this.category);
+    this.searchResults = [];
+        var url = new URL("https://newsapi.org/v2/top-headlines");
+        url.searchParams.append("country", "jp");
+        url.searchParams.append("apiKey", "3c7136debb3b4a758cc86fd27567de33");
+        url.searchParams.append("category", this.category);
+        const response = await fetch(url.href).then((response) =>
+          response.json()
+        );
+        for (const news of response.articles) {
+          const title = news.title;
+          const url = news.url;
+          const image = news.urlToImage;
+          this.searchResults.push({
+            title,
+            url,
+            image,
+          });
+        }
+    }
   },
 };
 </script>
 
 <style>
+  @media screen and (min-width: 481px) {
 .selectedNewsCategory {
   background-color: whitesmoke;
+}
+.newsSelectBottonsMobile{
+  display: none;
+}
+  }
+@media screen and (max-width: 481px) {
+.newsSelectBottons{
+  display: none;
+}
 }
 </style>
