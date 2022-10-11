@@ -9,9 +9,14 @@
     </div>
     <v-card class="accountCard ">
       <h1 class="cardTitle center">Account</h1>
-      <div class="cardElement">{{ $store.state.auth.userName }}<v-btn class="setUserNameBotton" @click="textFieldShow()" color="primary">変更</v-btn></div>
-      <p class="cardElement">{{ $store.state.auth.email }}</p>
-      <v-btn @click="logout()" class="logoutBtn center" color="error">ログアウト</v-btn>
+      <div class="cardElement">ユーザー名：{{ $store.state.auth.userName }}</div>
+      <p class="cardElement">メールアドレス：{{ $store.state.auth.email }}</p>
+      <div>
+        <v-btn class="setUserNameBotton" @click="textFieldShow()" color="primary">ユーザー名変更</v-btn>
+      </div>
+      <div>
+        <v-btn @click="logout()" class="logoutBtn center" color="error">ログアウト</v-btn>
+      </div>
     </v-card>
   </div>
 </template>
@@ -72,6 +77,7 @@ export default {
     width: 400px;
     height: 400px;
     margin: auto;
+    margin-top: 150px;
   }
   .cardTitle {
     margin: 50px;
@@ -82,13 +88,14 @@ export default {
     font-size: 20px;
   }
   .logoutBtn {
-    margin-top: 40px;
+    margin-top: 30px;
   }
   .center {
     text-align: center;
   }
   .setUserNameBotton{
     margin-left: 20px;
+    margin-top: 40px;
   }
   
 }
@@ -97,6 +104,7 @@ export default {
     width: 350px;
     height: 320px;
     margin: auto;
+   
   }
   .cardTitle {
     margin: 50px;

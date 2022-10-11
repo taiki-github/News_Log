@@ -83,7 +83,7 @@ export default {
           image: this.$route.query.image,
         });
         console.log(this.$route.query.Id);
-        this.$router.push("/memoList");
+        this.$router.push("../news/memoList");
         
         // this.memoId = this.memoId + 1;
       }

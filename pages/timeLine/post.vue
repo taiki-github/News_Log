@@ -18,7 +18,7 @@
             <v-card
               v-for="(task, index) in tasks"
               :key="index"
-              class="timelineCard"
+              class="mt-4"
             >
                 <div><v-icon>mdi-account</v-icon>{{ task.userName }}<br /></div>
                 <hr />
@@ -38,7 +38,7 @@
       </v-row>
     </div>
     <div class="postPageMobile">
-      <v-card class="postTextCard">
+      <v-card class="postTextCard mt-2">
         <v-textarea
           v-model="memo"
           rows="4"
@@ -54,7 +54,7 @@
             <v-card
               v-for="(task, index) in tasks"
               :key="index"
-              class="timelineCard"
+              class="timelineCard lastPostCard"
             >
                 <div><v-icon>mdi-account</v-icon>{{ task.userName }}<br /></div>
                 <hr />
@@ -202,6 +202,9 @@ export default {
 }
 .postPageMobile{
   display: none;
+}
+.lastPostCard{
+  margin-top: 5px;
 }
   }
   @media screen and (max-width: 481px) {

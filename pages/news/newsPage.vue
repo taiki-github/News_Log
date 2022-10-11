@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="newsSelectBottons">
+    <div class="pc">
       <div style="display: flex">
         <v-btn
           plain
@@ -35,7 +35,7 @@
           @click="selectNewsCategory('entertainment', 4)"
           class="selectBotton"
           >エンタメ
-          </v-btn>
+        </v-btn>
         <v-btn
           plain
           @click="selectNewsCategory('technology', 5)"
@@ -52,47 +52,82 @@
         </v-btn>
       </div>
     </div>
-    <div class="newsSelectBottonsMobile">
+    <div class="mobile">
       <div style="display: flex">
         <v-combobox
-      outlined
-      :items="items"
-      solo
-      v-model="select"
-      @change="selectBoxChange()"
-     ></v-combobox>
+          outlined
+          :items="items"
+          solo
+          v-model="select"
+          @change="selectBoxChange()"
+        ></v-combobox>
       </div>
     </div>
-    <v-row>
+
+    <div class="pc">
       <v-col
         v-for="(news, index) in searchResults"
         :key="index"
-        cols="12"
-        md="6"
+        class="newsCard"
       >
         <!-- keyとitemsが思っているのと逆。keyは必須 -->
-        <v-card class="mt-5">
+        <v-row>
+          <v-col cols="10">
+            <v-card>
+              <v-row>
+                <v-col cols="3">
+                  <v-img :src="news.image"></v-img>
+                </v-col>
+                <v-col cols="9">
+                  <v-card-title>
+                    <a :href="news.url" target="_blank">{{ news.title }}</a>
+                  </v-card-title>
+                  <div>
+                    {{ news.time }}
+                  </div>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-col>
+          <v-col cols="2">
+            <v-btn
+              class="news-plus-botton"
+              @click="newsMemo(index)"
+              color="success"
+              fab
+              small
+              dark
+            >
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-col>
+    </div>
+    <div class="mobile">
+      <v-col v-for="(news, index) in searchResults" :key="index">
+        <!-- keyとitemsが思っているのと逆。keyは必須 -->
+        <v-card>
           <v-row>
             <v-col cols="4">
               <v-img :src="news.image"></v-img>
             </v-col>
             <v-col cols="8">
-              <v-card-title>
+              <div>
                 <a :href="news.url" target="_blank">{{ news.title }}</a>
-              </v-card-title>
+              </div>
               <v-btn
                 class="news-plus-botton"
                 @click="newsMemo(index)"
                 color="success"
               >
-                メモ
+                追加
               </v-btn>
-              <!-- <v-btn class="news-plus-botton" color="warning"> 共有 </v-btn> -->
             </v-col>
           </v-row>
         </v-card>
       </v-col>
-    </v-row>
+    </div>
   </div>
 </template>
 
@@ -120,33 +155,37 @@ export default {
       userName: "",
       memoNews: [],
       items: [
-          'トップ',
-          '経済',
-          '科学',
-          '健康',
-          'エンタメ',
-          'テクノロジー',
-          'スポーツ'
-        ],
-        select:"トップ",
-        category:"general"
+        "トップ",
+        "経済",
+        "科学",
+        "健康",
+        "エンタメ",
+        "テクノロジー",
+        "スポーツ",
+      ],
+      select: "トップ",
+      category: "general",
     };
   },
   async created() {
     this.searchResults = [];
     // クエリーストリングを作成
     const baseUrl =
-      "https://newsapi.org/v2/top-headlines?country=jp&apiKey=3c7136debb3b4a758cc86fd27567de33";
+      "https://newsapi.org/v2/top-headlines?country=jp&pageSize=30&apiKey=3c7136debb3b4a758cc86fd27567de33";
     const response = await fetch(baseUrl).then((response) => response.json());
     // fetchはhtppリクエスト的なことが出きる
     for (const news of response.articles) {
       const title = news.title;
       const url = news.url;
       const image = news.urlToImage;
+      const time = news.publishedAt;
+      time = time.replace("T", " ");
+      time = time.replace("Z", " ");
       this.searchResults.push({
         title,
         url,
         image,
+        time,
       });
     }
   },
@@ -158,21 +197,19 @@ export default {
       this.memoId = Id.data().number;
 
       this.$router.push({
-        path: `edit/` + this.memoId,
+        path: `../edit/` + this.memoId,
         query: {
           title: this.searchResults[index].title,
           url: this.searchResults[index].url,
           image: this.searchResults[index].image,
-          memoId:this.memoId,
-          memo:this.memo
+          memoId: this.memoId,
+          memo: this.memo,
         },
-        
       });
       await setDoc(doc(db, "memoNumber", user), {
-          number: this.memoId+1,
-        });
+        number: this.memoId + 1,
+      });
     },
-
 
     async selectNewsCategory(keyword, id) {
       try {
@@ -182,6 +219,8 @@ export default {
         url.searchParams.append("country", "jp");
         url.searchParams.append("apiKey", "3c7136debb3b4a758cc86fd27567de33");
         url.searchParams.append("category", keyword);
+        url.searchParams.append("pageSize", 30);
+
         for (let i = 0; i < selectBotton.length; i++) {
           selectBotton[i].classList.remove("selectedNewsCategory");
         }
@@ -194,10 +233,14 @@ export default {
           const title = news.title;
           const url = news.url;
           const image = news.urlToImage;
+          const time = news.publishedAt;
+          time = time.replace("T", " ");
+          time = time.replace("Z", " ");
           this.searchResults.push({
             title,
             url,
             image,
+            time,
           });
         }
       } catch {
@@ -205,79 +248,85 @@ export default {
       }
     },
 
-
-    selectBoxChange(){
+    selectBoxChange() {
       console.log(this.select);
-       switch (this.select){
+      switch (this.select) {
         case "トップ":
-          this.category = "general" 
+          this.category = "general";
           break;
 
         case "経済":
-          this.category = "business"
+          this.category = "business";
           break;
 
         case "科学":
-           this.category = "science"
-           break;
+          this.category = "science";
+          break;
 
         case "健康":
-          this.category = "health"
+          this.category = "health";
           break;
 
         case "エンタメ":
-        this.category = "entertainment"
-        break;
+          this.category = "entertainment";
+          break;
 
         case "テクノロジー":
-        this.category = "technology"  
-        break;
+          this.category = "technology";
+          break;
 
         case "スポーツ":
-        this.category = "sports" 
-        break;  
-
-       }
-       console.log(this.category);
-       this.changeNewsCategory()
+          this.category = "sports";
+          break;
+      }
+      console.log(this.category);
+      this.changeNewsCategory();
     },
-   async changeNewsCategory(){
-    console.log(this.category);
-    this.searchResults = [];
-        var url = new URL("https://newsapi.org/v2/top-headlines");
-        url.searchParams.append("country", "jp");
-        url.searchParams.append("apiKey", "3c7136debb3b4a758cc86fd27567de33");
-        url.searchParams.append("category", this.category);
-        const response = await fetch(url.href).then((response) =>
-          response.json()
-        );
-        for (const news of response.articles) {
-          const title = news.title;
-          const url = news.url;
-          const image = news.urlToImage;
-          this.searchResults.push({
-            title,
-            url,
-            image,
-          });
-        }
-    }
+    async changeNewsCategory() {
+      console.log(this.category);
+      this.searchResults = [];
+      var url = new URL("https://newsapi.org/v2/top-headlines");
+      url.searchParams.append("country", "jp");
+      url.searchParams.append("apiKey", "3c7136debb3b4a758cc86fd27567de33");
+      url.searchParams.append("category", this.category);
+      url.searchParams.append("pageSize", 30);
+
+      const response = await fetch(url.href).then((response) =>
+        response.json()
+      );
+      for (const news of response.articles) {
+        const title = news.title;
+        const url = news.url;
+        const image = news.urlToImage;
+        const time = news.publishedAt;
+        time = time.replace("T", " ");
+        time = time.replace("Z", " ");
+        this.searchResults.push({
+          title,
+          url,
+          image,
+          time,
+        });
+      }
+      
+    },
   },
 };
 </script>
 
 <style>
-  @media screen and (min-width: 481px) {
-.selectedNewsCategory {
-  background-color: whitesmoke;
-}
-.newsSelectBottonsMobile{
-  display: none;
-}
+@media screen and (min-width: 481px) {
+  .selectedNewsCategory {
+    background-color: whitesmoke;
   }
-@media screen and (max-width: 481px) {
-.newsSelectBottons{
-  display: none;
+
+  .newsSelectBottonsMobile {
+    display: none;
+  }
 }
+@media screen and (max-width: 481px) {
+  .newsSelectBottons {
+    display: none;
+  }
 }
 </style>

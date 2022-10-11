@@ -121,27 +121,28 @@ export default {
          {
           icon: 'mdi-airplane',
           title:'ニュース',
-          to: '/newsPage'
+          to: '/news/newsPage'
         },
-        //  {
-        //   icon: 'mdi-weather-partly-cloudy',
-        //   title:'天気',
-        //   to: '/weather'
-        // },
+        
          {
           icon: 'mdi-pencil',
           title: '投稿',
-          to: '/timeLine/myList',
+          to: '/timeLine/post',
+        },
+        {
+          icon: 'mdi-weather-partly-cloudy',
+          title:'天気予報',
+          to: '/news/weather'
         },
          {
           icon: 'mdi-magnify',
           title:'ニュース検索',
-          to: '/search'
+          to: '/news/search'
         },
         {
           icon: 'mdi-folder ',
           title:'メモリスト',
-          to: '/memoList'
+          to: '/news/memoList'
         },
          {
           icon: 'mdi-account',

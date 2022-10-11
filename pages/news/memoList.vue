@@ -7,7 +7,7 @@
           <v-img :src="memo.image"></v-img>
         </v-col>
         <v-col cols="9">
-          <a :href="memo.url" target="_blank">{{ memo.title }}</a>
+          <v-card-title><a :href="memo.url" target="_blank">{{ memo.title }}</a></v-card-title>
           <div>
             <v-btn color="success" @click="viewNewsMemo(index)"> メモ</v-btn>
           </div>
@@ -61,7 +61,7 @@ export default {
       // this.memoId = Id.data().number;
 
       this.$router.push({
-        path: `edit/` + this.memos[index].memoId,
+        path: `../edit/` + this.memos[index].memoId,
         query: {
           title: this.memos[index].title,
           url: this.memos[index].url,

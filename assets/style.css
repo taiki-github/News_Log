@@ -1,6 +1,5 @@
 .timelineCard {
-   
-    margin-top: 20px;
+    margin-top: 10px;
   }
 
   .timelineMemo{
@@ -10,4 +9,19 @@
 
   .titleCard{
     width: 80%;
+  }
+
+@media screen and (min-width: 481px) {
+.mobile{
+ display: none;
+}
+.newsCard {
+  margin-top: 5px;
+}
+}
+
+@media screen and (max-width: 481px) {
+  .pc{
+   display: none;
+  }
   }
