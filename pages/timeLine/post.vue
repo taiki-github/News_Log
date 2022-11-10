@@ -16,18 +16,18 @@
           <v-card color="secondary" class="titleCard"><v-card-title>過去の投稿一覧</v-card-title>
       </v-card>
             <v-card
-              v-for="(task, index) in tasks"
+              v-for="(post, index) in tasks"
               :key="index"
               class="mt-4"
             >
-                <div><v-icon>mdi-account</v-icon>{{ task.userName }}<br /></div>
+                <div><v-icon>mdi-account</v-icon>{{ post.userName }}<br /></div>
                 <hr />
-                <div class="timelineMemo">{{ task.memo }}</div>
+                <div class="timelineMemo">{{ post.memo }}</div>
                 <v-row>
                   <v-col cols="9">
                   </v-col>
                   <v-col cols="1">
-                    <v-btn @click="deleteData(task.dbNumber)" color="error" class="deleteBtn">削除</v-btn>
+                    <v-btn @click="deleteData(post.dbNumber)" color="error" class="deleteBtn">削除</v-btn>
                   </v-col>
                 </v-row>
             </v-card>
@@ -52,14 +52,14 @@
       <v-card color="secondary" class="titleCard"><v-card-title>過去の投稿一覧</v-card-title>
       </v-card>
             <v-card
-              v-for="(task, index) in tasks"
+              v-for="(post, index) in tasks"
               :key="index"
               class="timelineCard lastPostCard"
             >
-                <div><v-icon>mdi-account</v-icon>{{ task.userName }}<br /></div>
+                <div><v-icon>mdi-account</v-icon>{{ post.userName }}<br /></div>
                 <hr />
-                <div class="timelineMemo">{{ task.memo }}</div>
-                    <v-btn @click="deleteData(task.dbNumber)" color="error" class="deleteBtn">削除</v-btn>    
+                <div class="timelineMemo">{{ post.memo }}</div>
+                    <v-btn @click="deleteData(post.dbNumber)" color="error" class="deleteBtn">削除</v-btn>    
             </v-card>
     </div>
     
@@ -75,7 +75,8 @@ import {
   setDoc,
   deleteDoc,
   getDoc,
-  where
+  where,
+  query,
 } from "firebase/firestore";
 export default {
   data() {
@@ -84,7 +85,8 @@ export default {
       memo: "",
       user: this.$store.state.auth.email,
       dbNumber: 10000,
-      userName:""
+      userName:"",
+      userName2:""
     };
   },
 
@@ -93,11 +95,14 @@ export default {
       const db = getFirestore(this.$firebase);
       const user = this.user;
       const querySnapshot = await getDocs(collection(db, user));
-      const Name = await getDoc(doc(db, "Name:"+this.user, "userName"));
-      const userName=Name.data().userName;
+      const Name = await getDoc(doc(db, "userName", this.user));
+      const userName=Name.data().name;
+       
+
       querySnapshot.forEach((doc) => {
         this.tasks.push(doc.data());
       });
+
       this.userName = userName
       this.tasks.reverse();
       const Number = await getDoc(doc(db, "Number", "dbNumber"));

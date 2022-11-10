@@ -11,14 +11,14 @@
           </v-card>
           <div class="postArea">
             <v-card
-              v-for="(task, index) in tasks"
+              v-for="(post, index) in tasks"
               :key="index"
               class="mt-3"
             >
               <div>
-                <div><v-icon>mdi-account</v-icon>{{ task.userName }}<br /></div>
+                <div><v-icon>mdi-account</v-icon>{{ post.userName }}<br /></div>
                 <hr />
-                <div class="timelineMemo">{{ task.memo }}</div>
+                <div class="timelineMemo">{{ post.memo }}</div>
               </div>
             </v-card>
           </div>
@@ -51,7 +51,7 @@
                 </v-col>
                 <v-col cols="6">
                   <h3>気温：{{ this.currentTemp }}</h3>
-                  <v-btn color="success" class="weatherBtn" @click="gotoWeatherPage()">詳しい予報を見る</v-btn>
+                  <v-btn color="success" class="weatherBtn" @click="gotoWeatherPage()">詳しい予報</v-btn>
                 </v-col>
               </v-row>
             </v-card>
@@ -65,14 +65,14 @@
       </v-card>
       <div class="postArea">
         <v-card
-          v-for="(task, index) in tasks"
+          v-for="(post, index) in tasks"
           :key="index"
           class="timelineCard"
         >
           <div>
-            <div><v-icon>mdi-account</v-icon>{{ task.userName }}<br /></div>
+            <div><v-icon>mdi-account</v-icon>{{ post.userName }}<br /></div>
             <hr />
-            <div class="timelineMemo">{{ task.memo }}</div>
+            <div class="timelineMemo">{{ post.memo }}</div>
           </div>
         </v-card>
       </div>
@@ -196,10 +196,10 @@ export default {
 <style>
 @media screen and (min-width: 481px) {
   .home-timeline {
-    margin-top: 50px;
+    margin-top: 30px;
   }
   .postArea {
-    height: 600px;
+    height: 400px;
     overflow: scroll;
   }
   .topPageMobile {

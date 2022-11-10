@@ -1,7 +1,6 @@
 <template>
   <div>
-    
-    <div class="pcSize">
+    <div class="pc">
       <v-row>
         <v-col cols="6">
           <div class="appDiscription">
@@ -18,7 +17,7 @@
             <div>
               <div class="mx loginTextField">
                 <v-text-field v-model="email" label="メールアドレス" />
-                <v-text-field v-model="password" label="パスワード" type="password"/>
+                <v-text-field v-model="password" label="パスワード" />
               </div>
             </div>
             <div class="centerLoginCard">
@@ -35,7 +34,7 @@
         </v-col>
       </v-row>
     </div>
-    <div class="mobileSize">
+    <div class="mobile">
       <div class="appDiscription">
         <h1>News Log</h1>
         <h4>

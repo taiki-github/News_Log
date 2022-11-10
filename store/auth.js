@@ -47,8 +47,8 @@ export const actions = {
             // vuexの引数には注意する
             const auth = getAuth(this.$firebase)
             const db = getFirestore(this.$firebase);
-            const Name = await getDoc(doc(db, "Name:"+payload.email, "userName"));
-            const userName=Name.data().userName;
+            // const Name = await getDoc(doc(db, "Name:"+payload.email, "userName"));
+            
             // この二つを経由しないとエラーになる
                 
             await signInWithEmailAndPassword(auth, payload.email, payload.password)
@@ -57,9 +57,10 @@ export const actions = {
             commit('setEmail',payload.email)
             commit('setUserUid', userCredential.user.uid)
             commit('setUserName',userName)
-            this.$router.push('/timeLine')
-
-            })
+        })
+        const Name =  await getDoc(doc(db, "userName", payload.email));
+        const userName=Name.data().name;
+        this.$router.push('/timeLine')
             
         } catch (e) {
             alert(e.message)

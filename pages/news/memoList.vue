@@ -1,16 +1,19 @@
 <template>
   <div>
 
-    <v-card v-for="(memo, index) in memos" :key="index" class="timelineCard">
+    <v-card v-for="(memo, index) in memos" :key="index" class="mt-5">
       <v-row>
         <v-col cols="3">
           <v-img :src="memo.image"></v-img>
         </v-col>
         <v-col cols="9">
           <v-card-title><a :href="memo.url" target="_blank">{{ memo.title }}</a></v-card-title>
-          <div>
-            <v-btn color="success" @click="viewNewsMemo(index)"> メモ</v-btn>
-          </div>
+          <v-row class="mt-3 mb-3">
+            <div>
+              <v-btn color="success" @click="viewNewsMemo(index)"> メモ</v-btn>
+            </div>
+            
+          </v-row>
         </v-col>
       </v-row>
     </v-card>
@@ -55,11 +58,6 @@ export default {
   },
   methods: {
     async viewNewsMemo(index) {
-      // const user = this.user;
-      // const db = getFirestore(this.$firebase);
-      // const Id = await getDoc(doc(db, "memoNumber", user));
-      // this.memoId = Id.data().number;
-
       this.$router.push({
         path: `../edit/` + this.memos[index].memoId,
         query: {
@@ -71,10 +69,10 @@ export default {
         },
       });
     },
+    
   },
 };
 </script>
 
 <style>
 </style>
-

@@ -10,6 +10,7 @@ export default function({
 }){
  //const auth = getAuth(store.state.auth.userUid)
  const auth = getAuth($firebase)
+//  console.log(auth);
 //  console.log(store.state.auth.isLoggedIn);
  if(store.state.auth.isLoggedIn==false){
   //  onAuthStateChanged(auth, user =>{

@@ -1,3 +1,4 @@
+
 <template>
   <div class="center">
     <div v-show="setUserNameTextField">
@@ -18,9 +19,8 @@
         <v-btn @click="logout()" class="logoutBtn center" color="error">ログアウト</v-btn>
       </div>
     </v-card>
-  </div>
-</template>
-
+    </div>
+  </template>
 <script>
 import {
   getFirestore,
@@ -37,7 +37,7 @@ export default {
     return {
       user: this.$store.state.auth.email,
       setUserNameTextField:false,
-      newName:""
+      newName:"",
     };
   },
   async created() {
@@ -51,9 +51,16 @@ export default {
     setUserName(){
       if(this.newName){
           const db = getFirestore(this.$Firestore);
-           setDoc(doc(db, "Name:"+this.user, "userName"), {
-            userName: this.newName,
+          //  setDoc(doc(db, "Name:"+this.user, "userName"), {
+          //   userName: this.newName,
+          // });
+
+          //データベースの整理テスト
+          setDoc(doc(db, "userName", this.user), {
+            name: this.newName,
+            email:this.user
           });
+
       this.$store.commit("auth/setUserName", 
         this.newName,
         );

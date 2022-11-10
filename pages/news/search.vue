@@ -52,7 +52,6 @@ export default {
           const response = await fetch(url.href).then((response) =>
             response.json()
           );
-
           for (const news of response.articles) {
             const title = news.title;
             const url = news.url;

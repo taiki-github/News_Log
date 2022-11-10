@@ -21,11 +21,11 @@
             counter="300"
             placeholder="ここにメモを入力"
             class="postTextArea"
-            value="aaa"
-          >aaa</v-textarea>
+          ></v-textarea>
         </v-col>
         <v-col cols="4">
           <v-btn @click="saveNewsMemo()" color="primary"> 保存 </v-btn>
+          <v-btn color="error" @click="deleteNewsMemo(index)" class="ml-2"> 削除</v-btn>
         </v-col>
       </v-row>
     </v-card>
@@ -88,6 +88,16 @@ export default {
         // this.memoId = this.memoId + 1;
       }
     },
+    async deleteNewsMemo(index){
+      try {
+        const db = getFirestore(this.$Firestore);
+        const user = this.user;
+        await deleteDoc(doc(db, "memoNews", user + this.$route.query.memoId));
+        this.$router.push("../news/memoList");
+      } catch (e) {
+        console.error("error", e);
+      }
+    }
   },
 };
 </script>
